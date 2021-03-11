@@ -7,7 +7,7 @@ export const useSliderControls = (infinite: boolean) => {
     slidesPerPage,
     totalItems,
     navigationStep,
-    transformMap,
+    transformMap
   } = useSliderState()
 
   const dispatch = useSliderDispatch()
@@ -48,6 +48,25 @@ export const useSliderControls = (infinite: boolean) => {
       payload: {
         transform: nextTransformValue,
         currentSlide: nextSlide,
+      },
+    })
+  }
+
+  const setPause = (pause: boolean) => {
+    dispatch({
+      type: 'SET_PAUSE',
+      payload: {
+        pause: pause,
+      }
+    })
+  }
+
+  const updateCounter = (counterCurrent: number, counterLimit: number) => {
+    dispatch({
+      type: 'UPDATE_COUNTER',
+      payload: {
+        counterCurrent: counterCurrent,
+        counterLimit: counterLimit,
       },
     })
   }
@@ -95,5 +114,5 @@ export const useSliderControls = (infinite: boolean) => {
     })
   }
 
-  return { goForward, goBack }
+  return { goForward, goBack, updateCounter, setPause }
 }

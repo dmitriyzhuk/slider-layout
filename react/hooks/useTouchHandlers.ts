@@ -1,11 +1,7 @@
 import { useState } from 'react'
 
 import { useSliderControls } from './useSliderControls'
-import {
-  SliderLayoutProps,
-  useSliderDispatch,
-  useSliderState,
-} from '../components/SliderContext'
+import { useSliderDispatch, useSliderState } from '../components/SliderContext'
 
 const SWIPE_THRESHOLD = 75
 const TOUCH_MOVE_DAMPING = 25
@@ -18,8 +14,8 @@ export const useTouchHandlers = ({
   centerMode: SliderLayoutProps['centerMode']
 }) => {
   const dispatch = useSliderDispatch()
-  const { transform } = useSliderState()
-  const { goForward, goBack } = useSliderControls(infinite)
+  const { transform, counterLimit } = useSliderState()
+  const { goForward, goBack, updateCounter } = useSliderControls(infinite)
 
   const [touchState, setTouchState] = useState({
     touchStartX: 0,
@@ -55,11 +51,13 @@ export const useTouchHandlers = ({
       // Swipe from left to right
       if (delta > 0) {
         goBack()
+        updateCounter(0, counterLimit)
       }
 
       // Swipe from right to left
       if (delta < 0) {
         goForward()
+        updateCounter(0, counterLimit)
       }
     } else {
       // Ignore the swipe if SWIPE_THRESHOLD is not reached

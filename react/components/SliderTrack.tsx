@@ -1,19 +1,11 @@
 import React, { FC, ReactNode } from 'react'
+import { useCssHandles, applyModifiers } from 'vtex.css-handles'
 
-import {
-  useSliderState,
-  useSliderDispatch,
-  SliderLayoutProps,
-} from './SliderContext'
+import { useSliderState, useSliderDispatch } from './SliderContext'
 import { useSliderGroupDispatch } from '../SliderLayoutGroup'
 import { useSliderVisibility } from '../hooks/useSliderVisibility'
-import { useContextCssHandles } from '../modules/cssHandles'
 
-export const CSS_HANDLES = [
-  'sliderTrack',
-  'slide',
-  'slideChildrenContainer',
-] as const
+const CSS_HANDLES = ['sliderTrack', 'slide', 'slideChildrenContainer'] as const
 
 interface Props {
   totalItems: number
@@ -79,7 +71,7 @@ const SliderTrack: FC<Props> = ({
 
   const dispatch = useSliderDispatch()
   const groupDispatch = useSliderGroupDispatch()
-  const { handles, withModifiers } = useContextCssHandles()
+  const handles = useCssHandles(CSS_HANDLES)
 
   const { shouldRenderItem, isItemVisible } = useSliderVisibility({
     currentSlide,
@@ -179,10 +171,10 @@ const SliderTrack: FC<Props> = ({
               adjustedIndex,
               totalItems
             )}
-            className={`${withModifiers('slide', [
-              getFirstOrLastVisible(slidesPerPage, adjustedIndex),
-              isItemVisible(adjustedIndex) ? 'visible' : 'hidden',
-            ])} flex relative`}
+            className={`${applyModifiers(
+              handles.slide,
+              getFirstOrLastVisible(slidesPerPage, adjustedIndex)
+            )} flex relative`}
             data-index={
               adjustedIndex >= 0 && adjustedIndex < totalItems
                 ? adjustedIndex + 1

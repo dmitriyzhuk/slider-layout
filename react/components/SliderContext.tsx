@@ -6,9 +6,23 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import { ResponsiveValuesTypes } from 'vtex.responsive-values'
 
 import { useSliderGroupState } from '../SliderLayoutGroup'
+
+interface SetPauseAction {
+  type: 'SET_PAUSE'
+  payload: {
+    pause: boolean
+  }
+}
+
+interface UpdateCounterAction {
+  type: 'UPDATE_COUNTER'
+  payload: {
+    counterCurrent: number
+    counterLimit: number
+  }
+}
 
 interface AdjustOnResizeAction {
   type: 'ADJUST_ON_RESIZE'
@@ -67,38 +81,13 @@ interface AdjustContextValuesAction {
   }
 }
 
-export interface SliderLayoutSiteEditorProps {
-  infinite?: boolean
-  showNavigationArrows?: 'mobileOnly' | 'desktopOnly' | 'always' | 'never'
-  showPaginationDots?: 'mobileOnly' | 'desktopOnly' | 'always' | 'never'
-  usePagination?: boolean
-  fullWidth?: boolean
-  arrowSize?: ResponsiveValuesTypes.ResponsiveValue<number>
-}
-
-export interface SliderLayoutProps {
-  totalItems?: number
-  label?: string
-  slideTransition?: {
-    /** Transition speed in ms */
-    speed: number
-    /** Transition delay in ms */
-    delay: number
-    timing: string
-  }
-  autoplay?: {
-    /** Timeout duration in ms */
-    timeout: number
-    stopOnHover?: boolean
-  }
-  navigationStep?: number | 'page'
-  itemsPerPage?: ResponsiveValuesTypes.ResponsiveValue<number>
-  centerMode?: ResponsiveValuesTypes.ResponsiveValue<
-    'center' | 'to-the-left' | 'disabled'
-  >
-}
-
 interface State extends Partial<SliderLayoutProps> {
+  /** Pause slider */
+  pause: boolean
+  /** Counter current timeout state */
+  counterCurrent: number
+  /** Counter timeout limit */
+  counterLimit: number
   /** Width of each slide */
   slideWidth: number
   /** Number of slides to show per page */
@@ -122,11 +111,12 @@ interface State extends Partial<SliderLayoutProps> {
 
 interface SliderContextProps extends SliderLayoutProps {
   totalItems: number
-  itemsPerPage: number
   infinite: SliderLayoutSiteEditorProps['infinite']
 }
 
 type Action =
+  | SetPauseAction
+  | UpdateCounterAction
   | AdjustOnResizeAction
   | SlideAction
   | TouchAction
@@ -141,6 +131,19 @@ const SliderDispatchContext = createContext<Dispatch | undefined>(undefined)
 
 function sliderContextReducer(state: State, action: Action): State {
   switch (action.type) {
+    case 'SET_PAUSE':
+      return {
+        ...state,
+        pause: action.payload.pause,
+      }
+
+    case 'UPDATE_COUNTER':
+      return {
+        ...state,
+        counterCurrent: action.payload.counterCurrent,
+        counterLimit: action.payload.counterLimit,
+      }
+
     case 'ADJUST_ON_RESIZE':
       return {
         ...state,
@@ -311,6 +314,9 @@ const SliderContextProvider: FC<SliderContextProps> = ({
     isPageNavigationStep: navigationStep === 'page',
     isOnTouchMove: false,
     useSlidingTransitionEffect: false,
+    counterCurrent: 0,
+    counterLimit: 0,
+    pause: false
   })
 
   if (

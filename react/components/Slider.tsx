@@ -1,25 +1,18 @@
 import React, { FC, useRef, Fragment, ReactNode } from 'react'
 import { useDevice } from 'vtex.device-detector'
+import { useCssHandles } from 'vtex.css-handles'
 
 import { useScreenResize } from '../hooks/useScreenResize'
 import { useTouchHandlers } from '../hooks/useTouchHandlers'
 import { useAutoplay } from '../hooks/useAutoplay'
-import {
-  SliderLayoutProps,
-  SliderLayoutSiteEditorProps,
-  useSliderState,
-} from './SliderContext'
-import SliderTrack, {
-  CSS_HANDLES as SliderTrackCssHandles,
-} from './SliderTrack'
-import Arrow, { CSS_HANDLES as ArrowCssHandles } from './Arrow'
-import PaginationDots, {
-  CSS_HANDLES as PaginationDotsCssHandles,
-} from './PaginationDots'
-import { useContextCssHandles } from '../modules/cssHandles'
+import { useSliderState } from './SliderContext'
+import SliderTrack from './SliderTrack'
+import Arrow from './Arrow'
+import PaginationDots from './PaginationDots'
 
 interface Props extends SliderLayoutSiteEditorProps {
-  arrowSize: number
+  showCounter: boolean,
+  counterTimeout: number,
   totalItems: number
   itemsPerPage: number
   centerMode: SliderLayoutProps['centerMode']
@@ -28,13 +21,7 @@ interface Props extends SliderLayoutSiteEditorProps {
   children?: Array<Exclude<ReactNode, boolean | null | undefined>>
 }
 
-export const CSS_HANDLES = [
-  'sliderLayoutContainer',
-  'sliderTrackContainer',
-  ...SliderTrackCssHandles,
-  ...ArrowCssHandles,
-  ...PaginationDotsCssHandles,
-] as const
+const CSS_HANDLES = ['sliderLayoutContainer', 'sliderTrackContainer'] as const
 
 const Slider: FC<Props> = ({
   children,
@@ -47,8 +34,10 @@ const Slider: FC<Props> = ({
   fullWidth,
   itemsPerPage,
   centerMode,
+  showCounter,
+  counterTimeout
 }) => {
-  const { handles } = useContextCssHandles()
+  const handles = useCssHandles(CSS_HANDLES)
   const { isMobile } = useDevice()
   const { label = 'slider', slidesPerPage } = useSliderState()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -57,7 +46,7 @@ const Slider: FC<Props> = ({
     centerMode,
   })
 
-  useAutoplay(infinite, containerRef)
+  useAutoplay(infinite, showCounter, counterTimeout, containerRef)
   useScreenResize(infinite, itemsPerPage)
 
   const shouldBeStaticList = slidesPerPage >= totalItems
@@ -141,6 +130,7 @@ const Slider: FC<Props> = ({
           totalItems={totalItems}
           controls={controls}
           infinite={infinite}
+          showCounter={showCounter}
         />
       )}
     </section>
