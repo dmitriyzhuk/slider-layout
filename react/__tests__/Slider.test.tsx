@@ -41,6 +41,8 @@ describe('Basic rendering', () => {
   it('should render complete slider, with arrows and pagination dots on default settings', () => {
     const { getByTestId, getByLabelText } = render(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -67,6 +69,8 @@ describe('Basic rendering', () => {
   it('should render without pagination features and use x-scrolling if usePagination is set to false', () => {
     const { getByLabelText, queryByTestId, queryByLabelText } = render(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -95,6 +99,8 @@ describe('Basic rendering', () => {
   it('should render without pagination features if there are not enough slides to fill a page', () => {
     const { getByLabelText, queryByTestId, queryByLabelText } = render(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={3}
         itemsPerPage={5}
@@ -125,6 +131,8 @@ describe('Basic rendering', () => {
   it('should add appropriate padding in the x-axis if slider is not a full width one', () => {
     const { getByLabelText } = render(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -153,6 +161,8 @@ describe('Behavior upon interaction', () => {
     // 'mobileOnly'
     const { queryByTestId, queryByLabelText, rerender } = render(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -176,6 +186,8 @@ describe('Behavior upon interaction', () => {
     // 'desktopOnly'
     rerender(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -199,6 +211,8 @@ describe('Behavior upon interaction', () => {
     // 'always'
     rerender(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -222,6 +236,8 @@ describe('Behavior upon interaction', () => {
     // 'never'
     rerender(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -249,6 +265,8 @@ describe('Behavior upon interaction', () => {
     // 'mobileOnly'
     const { queryByTestId, queryByLabelText, rerender } = render(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -272,6 +290,8 @@ describe('Behavior upon interaction', () => {
     // 'desktopOnly'
     rerender(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -295,6 +315,8 @@ describe('Behavior upon interaction', () => {
     // 'always'
     rerender(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}
@@ -318,6 +340,8 @@ describe('Behavior upon interaction', () => {
     // 'never'
     rerender(
       <Slider
+        showCounter
+        counterTimeout={1000}
         centerMode="disabled"
         totalItems={10}
         itemsPerPage={5}

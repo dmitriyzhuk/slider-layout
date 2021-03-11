@@ -24,14 +24,14 @@ test('should move all sliders in a group together', () => {
   const { container } = render(
     <SliderLayoutGroup>
       <div id="first-slider">
-        <SliderLayout showPaginationDots="never">
+        <SliderLayout showPaginationDots="never" showCounter counterTimeout={1000}>
           <div>Slider 1 Item 1</div>
           <div>Slider 1 Item 2</div>
           <div>Slider 1 Item 3</div>
         </SliderLayout>
       </div>
       <div id="second-slider">
-        <SliderLayout showPaginationDots="never">
+        <SliderLayout showPaginationDots="never" showCounter counterTimeout={1000}>
           <div>Slider 2 Item 1</div>
           <div>Slider 2 Item 2</div>
           <div>Slider 2 Item 3</div>
